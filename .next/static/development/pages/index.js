@@ -81,9 +81,7 @@ var Header = function Header() {
     __self: this
   }, "Definition"), __jsx("link", {
     rel: "stylesheet",
-    href: "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
-    integrity: "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
-    crossorigin: "anonymous",
+    href: "./index.css",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 7
@@ -91,7 +89,9 @@ var Header = function Header() {
     __self: this
   }), __jsx("link", {
     rel: "stylesheet",
-    href: "./index.css",
+    href: "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
+    integrity: "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
+    crossorigin: "anonymous",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 8
@@ -150,7 +150,7 @@ function Recomendation(props) {
   }
 
   return __jsx("div", {
-    className: "left",
+    className: "col-sm-12 col-lg-6",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 15
@@ -3772,6 +3772,201 @@ exports["default"] = function () {
 
 /***/ }),
 
+/***/ "./node_modules/process/browser.js":
+/*!*****************************************!*\
+  !*** ./node_modules/process/browser.js ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+
 /***/ "./node_modules/react/index.js":
 /*!*******************************************************************************************!*\
   !*** delegated ./node_modules/react/index.js from dll-reference dll_ea92a4d9664833a26066 ***!
@@ -3780,6 +3975,754 @@ exports["default"] = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(/*! dll-reference dll_ea92a4d9664833a26066 */ "dll-reference dll_ea92a4d9664833a26066"))("./node_modules/react/index.js");
+
+/***/ }),
+
+/***/ "./node_modules/string-hash/index.js":
+/*!*******************************************!*\
+  !*** ./node_modules/string-hash/index.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function hash(str) {
+  var hash = 5381,
+      i    = str.length;
+
+  while(i) {
+    hash = (hash * 33) ^ str.charCodeAt(--i);
+  }
+
+  /* JavaScript does bitwise operations (like XOR, above) on 32-bit signed
+   * integers. Since we want the results to be always positive, convert the
+   * signed int to an unsigned by doing an unsigned bitshift. */
+  return hash >>> 0;
+}
+
+module.exports = hash;
+
+
+/***/ }),
+
+/***/ "./node_modules/styled-jsx/dist/lib/stylesheet.js":
+/*!********************************************************!*\
+  !*** ./node_modules/styled-jsx/dist/lib/stylesheet.js ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+/*
+Based on Glamor's sheet
+https://github.com/threepointone/glamor/blob/667b480d31b3721a905021b26e1290ce92ca2879/src/sheet.js
+*/
+var isProd = process.env && "development" === 'production';
+
+var isString = function isString(o) {
+  return Object.prototype.toString.call(o) === '[object String]';
+};
+
+var StyleSheet =
+/*#__PURE__*/
+function () {
+  function StyleSheet() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$name = _ref.name,
+        name = _ref$name === void 0 ? 'stylesheet' : _ref$name,
+        _ref$optimizeForSpeed = _ref.optimizeForSpeed,
+        optimizeForSpeed = _ref$optimizeForSpeed === void 0 ? isProd : _ref$optimizeForSpeed,
+        _ref$isBrowser = _ref.isBrowser,
+        isBrowser = _ref$isBrowser === void 0 ? typeof window !== 'undefined' : _ref$isBrowser;
+
+    _classCallCheck(this, StyleSheet);
+
+    invariant(isString(name), '`name` must be a string');
+    this._name = name;
+    this._deletedRulePlaceholder = "#".concat(name, "-deleted-rule____{}");
+    invariant(typeof optimizeForSpeed === 'boolean', '`optimizeForSpeed` must be a boolean');
+    this._optimizeForSpeed = optimizeForSpeed;
+    this._isBrowser = isBrowser;
+    this._serverSheet = undefined;
+    this._tags = [];
+    this._injected = false;
+    this._rulesCount = 0;
+    var node = this._isBrowser && document.querySelector('meta[property="csp-nonce"]');
+    this._nonce = node ? node.getAttribute('content') : null;
+  }
+
+  _createClass(StyleSheet, [{
+    key: "setOptimizeForSpeed",
+    value: function setOptimizeForSpeed(bool) {
+      invariant(typeof bool === 'boolean', '`setOptimizeForSpeed` accepts a boolean');
+      invariant(this._rulesCount === 0, 'optimizeForSpeed cannot be when rules have already been inserted');
+      this.flush();
+      this._optimizeForSpeed = bool;
+      this.inject();
+    }
+  }, {
+    key: "isOptimizeForSpeed",
+    value: function isOptimizeForSpeed() {
+      return this._optimizeForSpeed;
+    }
+  }, {
+    key: "inject",
+    value: function inject() {
+      var _this = this;
+
+      invariant(!this._injected, 'sheet already injected');
+      this._injected = true;
+
+      if (this._isBrowser && this._optimizeForSpeed) {
+        this._tags[0] = this.makeStyleTag(this._name);
+        this._optimizeForSpeed = 'insertRule' in this.getSheet();
+
+        if (!this._optimizeForSpeed) {
+          if (!isProd) {
+            console.warn('StyleSheet: optimizeForSpeed mode not supported falling back to standard mode.');
+          }
+
+          this.flush();
+          this._injected = true;
+        }
+
+        return;
+      }
+
+      this._serverSheet = {
+        cssRules: [],
+        insertRule: function insertRule(rule, index) {
+          if (typeof index === 'number') {
+            _this._serverSheet.cssRules[index] = {
+              cssText: rule
+            };
+          } else {
+            _this._serverSheet.cssRules.push({
+              cssText: rule
+            });
+          }
+
+          return index;
+        },
+        deleteRule: function deleteRule(index) {
+          _this._serverSheet.cssRules[index] = null;
+        }
+      };
+    }
+  }, {
+    key: "getSheetForTag",
+    value: function getSheetForTag(tag) {
+      if (tag.sheet) {
+        return tag.sheet;
+      } // this weirdness brought to you by firefox
+
+
+      for (var i = 0; i < document.styleSheets.length; i++) {
+        if (document.styleSheets[i].ownerNode === tag) {
+          return document.styleSheets[i];
+        }
+      }
+    }
+  }, {
+    key: "getSheet",
+    value: function getSheet() {
+      return this.getSheetForTag(this._tags[this._tags.length - 1]);
+    }
+  }, {
+    key: "insertRule",
+    value: function insertRule(rule, index) {
+      invariant(isString(rule), '`insertRule` accepts only strings');
+
+      if (!this._isBrowser) {
+        if (typeof index !== 'number') {
+          index = this._serverSheet.cssRules.length;
+        }
+
+        this._serverSheet.insertRule(rule, index);
+
+        return this._rulesCount++;
+      }
+
+      if (this._optimizeForSpeed) {
+        var sheet = this.getSheet();
+
+        if (typeof index !== 'number') {
+          index = sheet.cssRules.length;
+        } // this weirdness for perf, and chrome's weird bug
+        // https://stackoverflow.com/questions/20007992/chrome-suddenly-stopped-accepting-insertrule
+
+
+        try {
+          sheet.insertRule(rule, index);
+        } catch (error) {
+          if (!isProd) {
+            console.warn("StyleSheet: illegal rule: \n\n".concat(rule, "\n\nSee https://stackoverflow.com/q/20007992 for more info"));
+          }
+
+          return -1;
+        }
+      } else {
+        var insertionPoint = this._tags[index];
+
+        this._tags.push(this.makeStyleTag(this._name, rule, insertionPoint));
+      }
+
+      return this._rulesCount++;
+    }
+  }, {
+    key: "replaceRule",
+    value: function replaceRule(index, rule) {
+      if (this._optimizeForSpeed || !this._isBrowser) {
+        var sheet = this._isBrowser ? this.getSheet() : this._serverSheet;
+
+        if (!rule.trim()) {
+          rule = this._deletedRulePlaceholder;
+        }
+
+        if (!sheet.cssRules[index]) {
+          // @TBD Should we throw an error?
+          return index;
+        }
+
+        sheet.deleteRule(index);
+
+        try {
+          sheet.insertRule(rule, index);
+        } catch (error) {
+          if (!isProd) {
+            console.warn("StyleSheet: illegal rule: \n\n".concat(rule, "\n\nSee https://stackoverflow.com/q/20007992 for more info"));
+          } // In order to preserve the indices we insert a deleteRulePlaceholder
+
+
+          sheet.insertRule(this._deletedRulePlaceholder, index);
+        }
+      } else {
+        var tag = this._tags[index];
+        invariant(tag, "old rule at index `".concat(index, "` not found"));
+        tag.textContent = rule;
+      }
+
+      return index;
+    }
+  }, {
+    key: "deleteRule",
+    value: function deleteRule(index) {
+      if (!this._isBrowser) {
+        this._serverSheet.deleteRule(index);
+
+        return;
+      }
+
+      if (this._optimizeForSpeed) {
+        this.replaceRule(index, '');
+      } else {
+        var tag = this._tags[index];
+        invariant(tag, "rule at index `".concat(index, "` not found"));
+        tag.parentNode.removeChild(tag);
+        this._tags[index] = null;
+      }
+    }
+  }, {
+    key: "flush",
+    value: function flush() {
+      this._injected = false;
+      this._rulesCount = 0;
+
+      if (this._isBrowser) {
+        this._tags.forEach(function (tag) {
+          return tag && tag.parentNode.removeChild(tag);
+        });
+
+        this._tags = [];
+      } else {
+        // simpler on server
+        this._serverSheet.cssRules = [];
+      }
+    }
+  }, {
+    key: "cssRules",
+    value: function cssRules() {
+      var _this2 = this;
+
+      if (!this._isBrowser) {
+        return this._serverSheet.cssRules;
+      }
+
+      return this._tags.reduce(function (rules, tag) {
+        if (tag) {
+          rules = rules.concat(_this2.getSheetForTag(tag).cssRules.map(function (rule) {
+            return rule.cssText === _this2._deletedRulePlaceholder ? null : rule;
+          }));
+        } else {
+          rules.push(null);
+        }
+
+        return rules;
+      }, []);
+    }
+  }, {
+    key: "makeStyleTag",
+    value: function makeStyleTag(name, cssString, relativeToTag) {
+      if (cssString) {
+        invariant(isString(cssString), 'makeStyleTag acceps only strings as second parameter');
+      }
+
+      var tag = document.createElement('style');
+      if (this._nonce) tag.setAttribute('nonce', this._nonce);
+      tag.type = 'text/css';
+      tag.setAttribute("data-".concat(name), '');
+
+      if (cssString) {
+        tag.appendChild(document.createTextNode(cssString));
+      }
+
+      var head = document.head || document.getElementsByTagName('head')[0];
+
+      if (relativeToTag) {
+        head.insertBefore(tag, relativeToTag);
+      } else {
+        head.appendChild(tag);
+      }
+
+      return tag;
+    }
+  }, {
+    key: "length",
+    get: function get() {
+      return this._rulesCount;
+    }
+  }]);
+
+  return StyleSheet;
+}();
+
+exports.default = StyleSheet;
+
+function invariant(condition, message) {
+  if (!condition) {
+    throw new Error("StyleSheet: ".concat(message, "."));
+  }
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/styled-jsx/dist/style.js":
+/*!***********************************************!*\
+  !*** ./node_modules/styled-jsx/dist/style.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.flush = flush;
+exports.default = void 0;
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _stylesheetRegistry = _interopRequireDefault(__webpack_require__(/*! ./stylesheet-registry */ "./node_modules/styled-jsx/dist/stylesheet-registry.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var styleSheetRegistry = new _stylesheetRegistry.default();
+
+var JSXStyle =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(JSXStyle, _Component);
+
+  function JSXStyle(props) {
+    var _this;
+
+    _classCallCheck(this, JSXStyle);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(JSXStyle).call(this, props));
+    _this.prevProps = {};
+    return _this;
+  }
+
+  _createClass(JSXStyle, [{
+    key: "shouldComponentUpdate",
+    // probably faster than PureComponent (shallowEqual)
+    value: function shouldComponentUpdate(otherProps) {
+      return this.props.id !== otherProps.id || // We do this check because `dynamic` is an array of strings or undefined.
+      // These are the computed values for dynamic styles.
+      String(this.props.dynamic) !== String(otherProps.dynamic);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      styleSheetRegistry.remove(this.props);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      // This is a workaround to make the side effect async safe in the "render" phase.
+      // See https://github.com/zeit/styled-jsx/pull/484
+      if (this.shouldComponentUpdate(this.prevProps)) {
+        // Updates
+        if (this.prevProps.id) {
+          styleSheetRegistry.remove(this.prevProps);
+        }
+
+        styleSheetRegistry.add(this.props);
+        this.prevProps = this.props;
+      }
+
+      return null;
+    }
+  }], [{
+    key: "dynamic",
+    value: function dynamic(info) {
+      return info.map(function (tagInfo) {
+        var baseId = tagInfo[0];
+        var props = tagInfo[1];
+        return styleSheetRegistry.computeId(baseId, props);
+      }).join(' ');
+    }
+  }]);
+
+  return JSXStyle;
+}(_react.Component);
+
+exports.default = JSXStyle;
+
+function flush() {
+  var cssRules = styleSheetRegistry.cssRules();
+  styleSheetRegistry.flush();
+  return cssRules;
+}
+
+/***/ }),
+
+/***/ "./node_modules/styled-jsx/dist/stylesheet-registry.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/styled-jsx/dist/stylesheet-registry.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _stringHash = _interopRequireDefault(__webpack_require__(/*! string-hash */ "./node_modules/string-hash/index.js"));
+
+var _stylesheet = _interopRequireDefault(__webpack_require__(/*! ./lib/stylesheet */ "./node_modules/styled-jsx/dist/lib/stylesheet.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var sanitize = function sanitize(rule) {
+  return rule.replace(/\/style/gi, '\\/style');
+};
+
+var StyleSheetRegistry =
+/*#__PURE__*/
+function () {
+  function StyleSheetRegistry() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$styleSheet = _ref.styleSheet,
+        styleSheet = _ref$styleSheet === void 0 ? null : _ref$styleSheet,
+        _ref$optimizeForSpeed = _ref.optimizeForSpeed,
+        optimizeForSpeed = _ref$optimizeForSpeed === void 0 ? false : _ref$optimizeForSpeed,
+        _ref$isBrowser = _ref.isBrowser,
+        isBrowser = _ref$isBrowser === void 0 ? typeof window !== 'undefined' : _ref$isBrowser;
+
+    _classCallCheck(this, StyleSheetRegistry);
+
+    this._sheet = styleSheet || new _stylesheet.default({
+      name: 'styled-jsx',
+      optimizeForSpeed: optimizeForSpeed
+    });
+
+    this._sheet.inject();
+
+    if (styleSheet && typeof optimizeForSpeed === 'boolean') {
+      this._sheet.setOptimizeForSpeed(optimizeForSpeed);
+
+      this._optimizeForSpeed = this._sheet.isOptimizeForSpeed();
+    }
+
+    this._isBrowser = isBrowser;
+    this._fromServer = undefined;
+    this._indices = {};
+    this._instancesCounts = {};
+    this.computeId = this.createComputeId();
+    this.computeSelector = this.createComputeSelector();
+  }
+
+  _createClass(StyleSheetRegistry, [{
+    key: "add",
+    value: function add(props) {
+      var _this = this;
+
+      if (undefined === this._optimizeForSpeed) {
+        this._optimizeForSpeed = Array.isArray(props.children);
+
+        this._sheet.setOptimizeForSpeed(this._optimizeForSpeed);
+
+        this._optimizeForSpeed = this._sheet.isOptimizeForSpeed();
+      }
+
+      if (this._isBrowser && !this._fromServer) {
+        this._fromServer = this.selectFromServer();
+        this._instancesCounts = Object.keys(this._fromServer).reduce(function (acc, tagName) {
+          acc[tagName] = 0;
+          return acc;
+        }, {});
+      }
+
+      var _this$getIdAndRules = this.getIdAndRules(props),
+          styleId = _this$getIdAndRules.styleId,
+          rules = _this$getIdAndRules.rules; // Deduping: just increase the instances count.
+
+
+      if (styleId in this._instancesCounts) {
+        this._instancesCounts[styleId] += 1;
+        return;
+      }
+
+      var indices = rules.map(function (rule) {
+        return _this._sheet.insertRule(rule);
+      }) // Filter out invalid rules
+      .filter(function (index) {
+        return index !== -1;
+      });
+      this._indices[styleId] = indices;
+      this._instancesCounts[styleId] = 1;
+    }
+  }, {
+    key: "remove",
+    value: function remove(props) {
+      var _this2 = this;
+
+      var _this$getIdAndRules2 = this.getIdAndRules(props),
+          styleId = _this$getIdAndRules2.styleId;
+
+      invariant(styleId in this._instancesCounts, "styleId: `".concat(styleId, "` not found"));
+      this._instancesCounts[styleId] -= 1;
+
+      if (this._instancesCounts[styleId] < 1) {
+        var tagFromServer = this._fromServer && this._fromServer[styleId];
+
+        if (tagFromServer) {
+          tagFromServer.parentNode.removeChild(tagFromServer);
+          delete this._fromServer[styleId];
+        } else {
+          this._indices[styleId].forEach(function (index) {
+            return _this2._sheet.deleteRule(index);
+          });
+
+          delete this._indices[styleId];
+        }
+
+        delete this._instancesCounts[styleId];
+      }
+    }
+  }, {
+    key: "update",
+    value: function update(props, nextProps) {
+      this.add(nextProps);
+      this.remove(props);
+    }
+  }, {
+    key: "flush",
+    value: function flush() {
+      this._sheet.flush();
+
+      this._sheet.inject();
+
+      this._fromServer = undefined;
+      this._indices = {};
+      this._instancesCounts = {};
+      this.computeId = this.createComputeId();
+      this.computeSelector = this.createComputeSelector();
+    }
+  }, {
+    key: "cssRules",
+    value: function cssRules() {
+      var _this3 = this;
+
+      var fromServer = this._fromServer ? Object.keys(this._fromServer).map(function (styleId) {
+        return [styleId, _this3._fromServer[styleId]];
+      }) : [];
+
+      var cssRules = this._sheet.cssRules();
+
+      return fromServer.concat(Object.keys(this._indices).map(function (styleId) {
+        return [styleId, _this3._indices[styleId].map(function (index) {
+          return cssRules[index].cssText;
+        }).join(_this3._optimizeForSpeed ? '' : '\n')];
+      }) // filter out empty rules
+      .filter(function (rule) {
+        return Boolean(rule[1]);
+      }));
+    }
+    /**
+     * createComputeId
+     *
+     * Creates a function to compute and memoize a jsx id from a basedId and optionally props.
+     */
+
+  }, {
+    key: "createComputeId",
+    value: function createComputeId() {
+      var cache = {};
+      return function (baseId, props) {
+        if (!props) {
+          return "jsx-".concat(baseId);
+        }
+
+        var propsToString = String(props);
+        var key = baseId + propsToString; // return `jsx-${hashString(`${baseId}-${propsToString}`)}`
+
+        if (!cache[key]) {
+          cache[key] = "jsx-".concat((0, _stringHash.default)("".concat(baseId, "-").concat(propsToString)));
+        }
+
+        return cache[key];
+      };
+    }
+    /**
+     * createComputeSelector
+     *
+     * Creates a function to compute and memoize dynamic selectors.
+     */
+
+  }, {
+    key: "createComputeSelector",
+    value: function createComputeSelector() {
+      var selectoPlaceholderRegexp = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : /__jsx-style-dynamic-selector/g;
+      var cache = {};
+      return function (id, css) {
+        // Sanitize SSR-ed CSS.
+        // Client side code doesn't need to be sanitized since we use
+        // document.createTextNode (dev) and the CSSOM api sheet.insertRule (prod).
+        if (!this._isBrowser) {
+          css = sanitize(css);
+        }
+
+        var idcss = id + css;
+
+        if (!cache[idcss]) {
+          cache[idcss] = css.replace(selectoPlaceholderRegexp, id);
+        }
+
+        return cache[idcss];
+      };
+    }
+  }, {
+    key: "getIdAndRules",
+    value: function getIdAndRules(props) {
+      var _this4 = this;
+
+      var css = props.children,
+          dynamic = props.dynamic,
+          id = props.id;
+
+      if (dynamic) {
+        var styleId = this.computeId(id, dynamic);
+        return {
+          styleId: styleId,
+          rules: Array.isArray(css) ? css.map(function (rule) {
+            return _this4.computeSelector(styleId, rule);
+          }) : [this.computeSelector(styleId, css)]
+        };
+      }
+
+      return {
+        styleId: this.computeId(id),
+        rules: Array.isArray(css) ? css : [css]
+      };
+    }
+    /**
+     * selectFromServer
+     *
+     * Collects style tags from the document with id __jsx-XXX
+     */
+
+  }, {
+    key: "selectFromServer",
+    value: function selectFromServer() {
+      var elements = Array.prototype.slice.call(document.querySelectorAll('[id^="__jsx-"]'));
+      return elements.reduce(function (acc, element) {
+        var id = element.id.slice(2);
+        acc[id] = element;
+        return acc;
+      }, {});
+    }
+  }]);
+
+  return StyleSheetRegistry;
+}();
+
+exports.default = StyleSheetRegistry;
+
+function invariant(condition, message) {
+  if (!condition) {
+    throw new Error("StyleSheetRegistry: ".concat(message, "."));
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/styled-jsx/style.js":
+/*!******************************************!*\
+  !*** ./node_modules/styled-jsx/style.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! ./dist/style */ "./node_modules/styled-jsx/dist/style.js")
+
 
 /***/ }),
 
@@ -3792,15 +4735,18 @@ module.exports = (__webpack_require__(/*! dll-reference dll_ea92a4d9664833a26066
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _components_footer__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/footer */ "./components/footer.js");
-/* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/header */ "./components/header.js");
-/* harmony import */ var _components_semantic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/semantic */ "./components/semantic.js");
-/* harmony import */ var _components_recomendation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/recomendation */ "./components/recomendation.js");
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-jsx/style */ "./node_modules/styled-jsx/style.js");
+/* harmony import */ var styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _components_footer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/footer */ "./components/footer.js");
+/* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/header */ "./components/header.js");
+/* harmony import */ var _components_semantic__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/semantic */ "./components/semantic.js");
+/* harmony import */ var _components_recomendation__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/recomendation */ "./components/recomendation.js");
 var _jsxFileName = "/home/nhdb/Definition/app/pages/index.js";
 
-var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
+
+var __jsx = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement;
 
 
 
@@ -3808,19 +4754,19 @@ var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 function App() {
-  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([""]),
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([""]),
       synonymList = _useState[0],
       setSynonym = _useState[1];
 
-  var _useState2 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""),
+  var _useState2 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
       definition = _useState2[0],
       setDefinition = _useState2[1];
 
-  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(""),
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(""),
       textValue = _useState3[0],
       setTextValue = _useState3[1];
 
-  var _useState4 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]),
+  var _useState4 = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]),
       tags = _useState4[0],
       setTags = _useState4[1];
 
@@ -3843,7 +4789,7 @@ function App() {
 
   function sintaticAnalisis() {
     var txt = document.getElementById('text');
-    fetch('http://localhost:5000/semantic/', {
+    fetch('http://localhost:5000', {
       method: 'POST',
       body: txt.value
     }).then(function (res) {
@@ -3854,26 +4800,27 @@ function App() {
   }
 
   return __jsx("div", {
+    className: "jsx-4082422546" + " " + "container",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 36
     },
     __self: this
-  }, __jsx(_components_header__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, __jsx(_components_header__WEBPACK_IMPORTED_MODULE_3__["default"], {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 37
     },
     __self: this
   }), __jsx("div", {
-    className: "row",
+    className: "jsx-4082422546" + " " + "row",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 38
     },
     __self: this
   }, __jsx("div", {
-    className: "left",
+    className: "jsx-4082422546" + " " + 'col-sm-12 col-lg-6',
     __source: {
       fileName: _jsxFileName,
       lineNumber: 39
@@ -3884,50 +4831,46 @@ function App() {
     onChange: function onChange(text) {
       return recomendation(text.target.value);
     },
-    rows: "10",
-    cols: "100",
     id: "text",
     placeholder: "Write here",
+    className: "jsx-4082422546" + " " + "form-control",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 40
     },
     __self: this
   }), __jsx("br", {
+    className: "jsx-4082422546",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 40
     },
     __self: this
-  }), __jsx("button", {
-    onClick: sintaticAnalisis,
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 41
-    },
-    __self: this
-  }, "Get semantic")), __jsx(_components_recomendation__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  })), __jsx(_components_recomendation__WEBPACK_IMPORTED_MODULE_5__["default"], {
     definition: definition,
     synonyms: synonymList,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 43
+      lineNumber: 42
     },
     __self: this
-  })), __jsx(_components_semantic__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  })), __jsx(_components_semantic__WEBPACK_IMPORTED_MODULE_4__["default"], {
     tags: tags,
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 45
+      lineNumber: 44
     },
     __self: this
-  }), __jsx(_components_footer__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }), __jsx(_components_footer__WEBPACK_IMPORTED_MODULE_2__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 47
+      lineNumber: 46
     },
     __self: this
-  }));
+  }), __jsx(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
+    id: "4082422546",
+    __self: this
+  }, "@font-face{font-family:myFirstFont;src:url(imperfecta.ttf);}body{background-color:rgb(31,31,31);color:rgb(202,202,202);font-family:myFirstFont;margin-left:25px;}.title,footer{font-size:60px;font-weight:900;-webkit-letter-spacing:-1px;-moz-letter-spacing:-1px;-ms-letter-spacing:-1px;letter-spacing:-1px;margin:5px;padding:10px;}.synonym{list-style-type:none;}body{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-flex-direction:column;-ms-flex-direction:column;flex-direction:column;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9ob21lL25oZGIvRGVmaW5pdGlvbi9hcHAvcGFnZXMvaW5kZXguanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBOEN5QixBQUcrQixBQUtXLEFBT2xCLEFBU00sQUFLVCxlQWJJLE1BU2pCLEdBckJ1QixPQUtBLEFBUUYsaUJBWHJCLE1BSXlCLG9CQW9CSCxJQW5CTCxpQkFDakIsaUNBT1csV0FDRSxhQUNiLEFBVUEiLCJmaWxlIjoiL2hvbWUvbmhkYi9EZWZpbml0aW9uL2FwcC9wYWdlcy9pbmRleC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHVzZVN0YXRlIH0gZnJvbSAncmVhY3QnO1xuaW1wb3J0IEZvb3RlciBmcm9tICcuLi9jb21wb25lbnRzL2Zvb3Rlcic7XG5pbXBvcnQgSGVhZGVyIGZyb20gJy4uL2NvbXBvbmVudHMvaGVhZGVyJztcbmltcG9ydCBTZW1hbnRpYyBmcm9tICcuLi9jb21wb25lbnRzL3NlbWFudGljJztcbmltcG9ydCBSZWNvbWVuZGF0aW9uIGZyb20gJy4uL2NvbXBvbmVudHMvcmVjb21lbmRhdGlvbic7XG5cbmZ1bmN0aW9uIEFwcCgpIHtcblx0Y29uc3QgW3N5bm9ueW1MaXN0LCBzZXRTeW5vbnltXSA9IHVzZVN0YXRlKFtcIlwiXSk7XG5cdGNvbnN0IFtkZWZpbml0aW9uLCBzZXREZWZpbml0aW9uXSA9IHVzZVN0YXRlKFwiXCIpO1xuXHRjb25zdCBbdGV4dFZhbHVlLCBzZXRUZXh0VmFsdWVdID0gdXNlU3RhdGUoXCJcIik7XG5cdGNvbnN0IFt0YWdzLCBzZXRUYWdzXSA9IHVzZVN0YXRlKFtdKTtcblxuXHRmdW5jdGlvbiByZWNvbWVuZGF0aW9uKHRleHRhcmVhKSB7XG5cdFx0c2V0VGV4dFZhbHVlKHRleHRhcmVhKTtcblx0XHRjb25zdCBsYXN0V29yZCA9IHR4dCA9PiB0eHQuc3BsaXQoJyAnKS5zbGljZSgtMSk7XG5cblx0XHRmZXRjaCgnaHR0cHM6Ly9hcGlkZWZpbml0aW9uLmhlcm9rdWFwcC5jb20vd29yZHMvJytsYXN0V29yZCh0ZXh0YXJlYSkpXG5cdFx0LnRoZW4ocmVzID0+IHtcblx0XHRcdHJlcy5qc29uKClcblx0XHRcdC50aGVuKGRhdGEgPT4ge1xuXHRcdFx0XHRzZXREZWZpbml0aW9uKGRhdGFbJ2RlZmluaXRpb24nXSB8fCBcIi4uLlwiKTtcblx0XHRcdFx0c2V0U3lub255bShkYXRhWydzeW5vbnltcyddIHx8IFtdKTtcblx0XHRcdH0pXG5cdFx0fSk7XG5cdH07XG5cblx0ZnVuY3Rpb24gc2ludGF0aWNBbmFsaXNpcygpe1xuXHRcdGNvbnN0IHR4dCA9IGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCd0ZXh0Jyk7XG5cdFx0ZmV0Y2goJ2h0dHA6Ly9sb2NhbGhvc3Q6NTAwMCcsIHtcblx0XHRcdG1ldGhvZDogJ1BPU1QnLFxuXHRcdFx0Ym9keTogdHh0LnZhbHVlLFxuXHRcdH0pLnRoZW4ocmVzID0+IHJlcy5qc29uKCkudGhlbihkYXRhID0+IHNldFRhZ3MoZGF0YVsndGFncyddKSApKTtcblx0fVxuXG5cdHJldHVybiAoXG4gICAgXHQ8ZGl2IGNsYXNzTmFtZT1cImNvbnRhaW5lclwiPlxuICAgICAgXHRcdDxIZWFkZXIvPlxuXHRcdFx0PGRpdiBjbGFzc05hbWU9XCJyb3dcIj5cblx0XHRcdFx0PGRpdiBjbGFzc05hbWU9J2NvbC1zbS0xMiBjb2wtbGctNic+XG5cdFx0XHRcdFx0PHRleHRhcmVhIGNsYXNzTmFtZT1cImZvcm0tY29udHJvbFwiIHZhbHVlPXt0ZXh0VmFsdWV9IG9uQ2hhbmdlPXsgdGV4dCA9PiByZWNvbWVuZGF0aW9uKHRleHQudGFyZ2V0LnZhbHVlKSB9IGlkPSd0ZXh0JyBwbGFjZWhvbGRlcj1cIldyaXRlIGhlcmVcIi8+PGJyLz5cblx0XHRcdFx0PC9kaXY+XG5cdFx0XHRcdDxSZWNvbWVuZGF0aW9uIGRlZmluaXRpb249e2RlZmluaXRpb259IHN5bm9ueW1zPXtzeW5vbnltTGlzdH0gLz5cblx0XHRcdDwvZGl2PlxuXHRcdFx0PFNlbWFudGljIHRhZ3M9e3RhZ3N9Lz5cblx0XHRcdFxuICAgICAgXHRcdDxGb290ZXIvPlxuXHRcdFx0ICA8c3R5bGUganN4IGdsb2JhbCA+e2Bcblx0XHRcdFx0XHRAZm9udC1mYWNlIHtcblx0XHRcdFx0XHRcdGZvbnQtZmFtaWx5OiBteUZpcnN0Rm9udDtcblx0XHRcdFx0XHRcdHNyYzogdXJsKGltcGVyZmVjdGEudHRmKTtcblx0XHRcdFx0XHQgIFxuXHRcdFx0XHRcdCAgfVxuXHRcdFx0XHRcdCAgYm9keXtcblx0XHRcdFx0XHRcdCAgYmFja2dyb3VuZC1jb2xvcjogcmdiKDMxLCAzMSwgMzEpO1xuXHRcdFx0XHRcdFx0ICBjb2xvcjpyZ2IoMjAyLDIwMiwyMDIpO1xuXHRcdFx0XHRcdFx0ICBmb250LWZhbWlseTogbXlGaXJzdEZvbnQ7XG5cdFx0XHRcdFx0XHQgIG1hcmdpbi1sZWZ0OjI1cHg7XG5cdFx0XHRcdFx0ICB9XG5cdFx0XHRcdFx0ICBcblx0XHRcdFx0XHQgIC50aXRsZSwgZm9vdGVye1xuXHRcdFx0XHRcdFx0ICBmb250LXNpemU6IDYwcHg7XG5cdFx0XHRcdFx0XHQgIGZvbnQtd2VpZ2h0OiA5MDA7XG5cdFx0XHRcdFx0XHQgIGxldHRlci1zcGFjaW5nOiAtMXB4O1xuXHRcdFx0XHRcdCAgXG5cdFx0XHRcdFx0XHQgIG1hcmdpbjo1cHg7XG5cdFx0XHRcdFx0XHQgIHBhZGRpbmc6MTBweDtcblx0XHRcdFx0XHQgIH1cblx0XHRcdFx0XHQgIFxuXHRcdFx0XHRcdCAgLnN5bm9ueW17XG5cdFx0XHRcdFx0XHQgIGxpc3Qtc3R5bGUtdHlwZTogbm9uZTsgXG5cdFx0XHRcdFx0ICB9XG5cblx0XHRcdFx0XHQgIFxuXHRcdFx0XHRcdCAgYm9keXsgXG5cdFx0XHRcdFx0XHQgIGRpc3BsYXk6ZmxleDsgXG5cdFx0XHRcdFx0XHQgIGZsZXgtZGlyZWN0aW9uOmNvbHVtbjsgXG5cdFx0XHRcdFx0ICB9XG5cblx0XHRcdFx0XHQgIFxuXHRcdFx0XHRcdCAgXG5cdFx0XHRcdGB9PC9zdHlsZT5cblx0XHQ8L2Rpdj5cblx0KTtcbn1cblxuZXhwb3J0IGRlZmF1bHQgQXBwO1xuIl19 */\n/*@ sourceURL=/home/nhdb/Definition/app/pages/index.js */"));
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (App);

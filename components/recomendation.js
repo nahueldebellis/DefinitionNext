@@ -12,7 +12,7 @@ function Recomendation(props) {
 	}
 
     return (
-        <div className='left'>
+        <div className='col-sm-12 col-lg-6'>
             <label>Definition: </label><br/>
             <p id='definition'>{props.definition}</p>
             <label>Synonyms: </label><br/>
