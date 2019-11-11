@@ -1,0 +1,1 @@
+{"ast":null,"code":"const Semantic = props => {};\n\nexport default Semantic;","map":{"version":3,"sources":["/app/components/semantic.js"],"names":["Semantic","props"],"mappings":"AAAA,MAAMA,QAAQ,GAAIC,KAAD,IAAW,CAG3B,CAHD;;AAKA,eAAeD,QAAf","sourcesContent":["const Semantic = (props) => {\n\n\n}\n\nexport default Semantic;\n\n"]},"metadata":{},"sourceType":"module"}
