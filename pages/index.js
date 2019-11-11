@@ -26,7 +26,7 @@ function App() {
 
 	function sintaticAnalisis(){
 		const txt = document.getElementById('text');
-		fetch('http://localhost:5000/semantic/', {
+		fetch('http://localhost:5000', {
 			method: 'POST',
 			body: txt.value,
 		}).then(res => res.json().then(data => setTags(data['tags']) ));
@@ -37,8 +37,7 @@ function App() {
       		<Header/>
 			<div className="row">
 				<div className='left'>
-					<textarea value={textValue} onChange={ text => recomendation(text.target.value) } rows="10" cols="100" id='text' placeholder="Write here"/><br/>
-					<button onClick={sintaticAnalisis}>Get semantic</button>
+					<textarea value={textValue} onChange={ text => recomendation(text.target.value) } id='text' placeholder="Write here"/><br/>
 				</div>
 				<Recomendation definition={definition} synonyms={synonymList} />
 			</div>
