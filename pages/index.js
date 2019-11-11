@@ -14,7 +14,7 @@ function App() {
 		setTextValue(textarea);
 		const lastWord = txt => txt.split(' ').slice(-1);
 
-		fetch('http://localhost:5000/words/'+lastWord(textarea))
+		fetch('https://apidefinition.herokuapp.com/words/'+lastWord(textarea))
 		.then(res => {
 			res.json()
 			.then(data => {
