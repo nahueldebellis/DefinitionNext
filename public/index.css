@@ -7,6 +7,7 @@ body{
 	background-color: rgb(31, 31, 31);
 	color:rgb(202,202,202);
 	font-family: myFirstFont;
+	margin:25px;
 }
 
 .title, footer{

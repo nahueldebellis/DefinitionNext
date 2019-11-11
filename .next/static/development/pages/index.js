@@ -11,24 +11,31 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "/app/components/footer.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/footer.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 var Footer = function Footer() {
-  return __jsx("footer", {
+  return __jsx("div", {
+    className: "box",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 5
     },
     __self: this
-  }, __jsx("p", {
+  }, __jsx("footer", {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 6
     },
     __self: this
-  }, "stop words not works"));
+  }, __jsx("p", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 7
+    },
+    __self: this
+  }, "stop words not works")));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Footer);
@@ -48,7 +55,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/head */ "./node_modules/next/dist/next-server/lib/head.js");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "/app/components/header.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/header.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -74,30 +81,40 @@ var Header = function Header() {
     __self: this
   }, "Definition"), __jsx("link", {
     rel: "stylesheet",
-    href: "./index.css",
+    href: "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
+    integrity: "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
+    crossorigin: "anonymous",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 7
+    },
+    __self: this
+  }), __jsx("link", {
+    rel: "stylesheet",
+    href: "./index.css",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 8
     },
     __self: this
   }), __jsx("script", {
     src: "./index.js",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 9
     },
     __self: this
   })), __jsx("header", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10
+      lineNumber: 11
     },
     __self: this
   }, __jsx("p", {
     className: "title",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11
+      lineNumber: 12
     },
     __self: this
   }, "Definition Words")));
@@ -118,7 +135,7 @@ var Header = function Header() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "/app/components/recomendation.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/recomendation.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -208,7 +225,7 @@ function Recomendation(props) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "/app/components/semantic.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/semantic.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -227,13 +244,7 @@ var Semantic = function Semantic(props) {
         lineNumber: 9
       },
       __self: this
-    }, __jsx("label", {
-      __source: {
-        fileName: _jsxFileName,
-        lineNumber: 10
-      },
-      __self: this
-    }, arrTag[0], " "), " ", arrTag[1]);
+    }, arrTag[0], "  ", arrTag[1]);
   }));
 };
 
@@ -3345,10 +3356,10 @@ for (var i = 0; i < DOMIterables.length; i++) {
 
 /***/ }),
 
-/***/ "./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2Fapp%2Fpages%2Findex.js!./":
-/*!**************************************************************************************************************************************!*\
-  !*** ./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2Fapp%2Fpages%2Findex.js ***!
-  \**************************************************************************************************************************************/
+/***/ "./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2Fhome%2Fnhdb%2FDefinition%2Fapp%2Fpages%2Findex.js!./":
+/*!*****************************************************************************************************************************************************************!*\
+  !*** ./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2Fhome%2Fnhdb%2FDefinition%2Fapp%2Fpages%2Findex.js ***!
+  \*****************************************************************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3763,12 +3774,12 @@ exports["default"] = function () {
 
 /***/ "./node_modules/react/index.js":
 /*!*******************************************************************************************!*\
-  !*** delegated ./node_modules/react/index.js from dll-reference dll_e9ad7d891b372a4221cf ***!
+  !*** delegated ./node_modules/react/index.js from dll-reference dll_ea92a4d9664833a26066 ***!
   \*******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(/*! dll-reference dll_e9ad7d891b372a4221cf */ "dll-reference dll_e9ad7d891b372a4221cf"))("./node_modules/react/index.js");
+module.exports = (__webpack_require__(/*! dll-reference dll_ea92a4d9664833a26066 */ "dll-reference dll_ea92a4d9664833a26066"))("./node_modules/react/index.js");
 
 /***/ }),
 
@@ -3787,7 +3798,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/header */ "./components/header.js");
 /* harmony import */ var _components_semantic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/semantic */ "./components/semantic.js");
 /* harmony import */ var _components_recomendation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/recomendation */ "./components/recomendation.js");
-var _jsxFileName = "/app/pages/index.js";
+var _jsxFileName = "/home/nhdb/Definition/app/pages/index.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -3820,7 +3831,7 @@ function App() {
       return txt.split(' ').slice(-1);
     };
 
-    fetch('http://localhost:5000/words/' + lastWord(textarea)).then(function (res) {
+    fetch('https://apidefinition.herokuapp.com/words/' + lastWord(textarea)).then(function (res) {
       res.json().then(function (data) {
         setDefinition(data['definition'] || "...");
         setSynonym(data['synonyms'] || []);
@@ -3923,28 +3934,28 @@ function App() {
 
 /***/ }),
 
-/***/ 1:
-/*!******************************************************************************************!*\
-  !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2Fapp%2Fpages%2Findex.js ***!
-  \******************************************************************************************/
+/***/ 0:
+/*!*********************************************************************************************************************!*\
+  !*** multi next-client-pages-loader?page=%2F&absolutePagePath=%2Fhome%2Fnhdb%2FDefinition%2Fapp%2Fpages%2Findex.js ***!
+  \*********************************************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2F&absolutePagePath=%2Fapp%2Fpages%2Findex.js! */"./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2Fapp%2Fpages%2Findex.js!./");
+module.exports = __webpack_require__(/*! next-client-pages-loader?page=%2F&absolutePagePath=%2Fhome%2Fnhdb%2FDefinition%2Fapp%2Fpages%2Findex.js! */"./node_modules/next/dist/build/webpack/loaders/next-client-pages-loader.js?page=%2F&absolutePagePath=%2Fhome%2Fnhdb%2FDefinition%2Fapp%2Fpages%2Findex.js!./");
 
 
 /***/ }),
 
-/***/ "dll-reference dll_e9ad7d891b372a4221cf":
+/***/ "dll-reference dll_ea92a4d9664833a26066":
 /*!*******************************************!*\
-  !*** external "dll_e9ad7d891b372a4221cf" ***!
+  !*** external "dll_ea92a4d9664833a26066" ***!
   \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = dll_e9ad7d891b372a4221cf;
+module.exports = dll_ea92a4d9664833a26066;
 
 /***/ })
 
-},[[1,"static/runtime/webpack.js"]]]);
+},[[0,"static/runtime/webpack.js"]]]);
 //# sourceMappingURL=index.js.map

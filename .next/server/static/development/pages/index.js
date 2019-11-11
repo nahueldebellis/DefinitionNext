@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -104,24 +104,31 @@ module.exports =
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "/app/components/footer.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/footer.js";
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
 
 const Footer = () => {
-  return __jsx("footer", {
+  return __jsx("div", {
+    className: "box",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 5
     },
     __self: undefined
-  }, __jsx("p", {
+  }, __jsx("footer", {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 6
     },
     __self: undefined
-  }, "stop words not works"));
+  }, __jsx("p", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 7
+    },
+    __self: undefined
+  }, "stop words not works")));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Footer);
@@ -141,7 +148,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/head */ "next/head");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "/app/components/header.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/header.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -167,30 +174,40 @@ const Header = () => {
     __self: undefined
   }, "Definition"), __jsx("link", {
     rel: "stylesheet",
-    href: "./index.css",
+    href: "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
+    integrity: "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T",
+    crossorigin: "anonymous",
     __source: {
       fileName: _jsxFileName,
       lineNumber: 7
+    },
+    __self: undefined
+  }), __jsx("link", {
+    rel: "stylesheet",
+    href: "./index.css",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 8
     },
     __self: undefined
   }), __jsx("script", {
     src: "./index.js",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 9
     },
     __self: undefined
   })), __jsx("header", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10
+      lineNumber: 11
     },
     __self: undefined
   }, __jsx("p", {
     className: "title",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11
+      lineNumber: 12
     },
     __self: undefined
   }, "Definition Words")));
@@ -211,7 +228,7 @@ const Header = () => {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "/app/components/recomendation.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/recomendation.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -297,7 +314,7 @@ function Recomendation(props) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-var _jsxFileName = "/app/components/semantic.js";
+var _jsxFileName = "/home/nhdb/Definition/app/components/semantic.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -315,13 +332,7 @@ const Semantic = props => {
       lineNumber: 9
     },
     __self: undefined
-  }, __jsx("label", {
-    __source: {
-      fileName: _jsxFileName,
-      lineNumber: 10
-    },
-    __self: undefined
-  }, arrTag[0], " "), " ", arrTag[1])));
+  }, arrTag[0], "  ", arrTag[1])));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Semantic);
@@ -343,7 +354,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/header */ "./components/header.js");
 /* harmony import */ var _components_semantic__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/semantic */ "./components/semantic.js");
 /* harmony import */ var _components_recomendation__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/recomendation */ "./components/recomendation.js");
-var _jsxFileName = "/app/pages/index.js";
+var _jsxFileName = "/home/nhdb/Definition/app/pages/index.js";
 
 var __jsx = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement;
 
@@ -375,7 +386,7 @@ function App() {
 
     const lastWord = txt => txt.split(' ').slice(-1);
 
-    fetch('http://localhost:5000/words/' + lastWord(textarea)).then(res => {
+    fetch('https://apidefinition.herokuapp.com/words/' + lastWord(textarea)).then(res => {
       res.json().then(data => {
         setDefinition(data['definition'] || "...");
         setSynonym(data['synonyms'] || []);
@@ -472,14 +483,14 @@ function App() {
 
 /***/ }),
 
-/***/ 4:
+/***/ 3:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /app/pages/index.js */"./pages/index.js");
+module.exports = __webpack_require__(/*! /home/nhdb/Definition/app/pages/index.js */"./pages/index.js");
 
 
 /***/ }),
