@@ -8,10 +8,11 @@ function App() {
 	const [synonymList, setSynonym] = useState([""]);
 	const [definition, setDefinition] = useState("");
 	const [textValue, setTextValue] = useState("");
-	const [tags, setTags] = useState([]);
+	const [pdfUrl, setPdf] = useState([]);
 
 	function recomendation(textarea) {
 		setTextValue(textarea);
+		getPDF(textarea);
 		const lastWord = txt => txt.split(' ').slice(-1);
 
 		fetch('https://apidefinition.herokuapp.com/words/'+lastWord(textarea))
@@ -19,17 +20,15 @@ function App() {
 			res.json()
 			.then(data => {
 				setDefinition(data['definition'] || "...");
-				setSynonym(data['synonyms'] || []);
+				setSynonym(data['synonyms'] || ["..."]);
 			})
 		});
 	};
 
-	function sintaticAnalisis(){
-		const txt = document.getElementById('text');
-		fetch('http://localhost:5000', {
-			method: 'POST',
-			body: txt.value,
-		}).then(res => res.json().then(data => setTags(data['tags']) ));
+	function getPDF(txt){
+		fetch('http://localhost:5000/pdf/'+txt, {
+			method: 'GET',
+		}).then(res => res.blob()).then(data => setPdf(window.URL.createObjectURL(data)));
 	}
 
 	return (
@@ -41,7 +40,7 @@ function App() {
 				</div>
 				<Recomendation definition={definition} synonyms={synonymList} />
 			</div>
-			<Semantic tags={tags}/>
+			<a href={pdfUrl}>Download PDF!!!</a>
 			
       		<Footer/>
 			  <style jsx global >{`

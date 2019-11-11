@@ -15,7 +15,7 @@ function Recomendation(props) {
         <div className='col-sm-12 col-lg-6'>
             <label>Definition: </label><br/>
             <p id='definition'>{props.definition}</p>
-            <label>Synonyms: </label><br/>
+            <label>Related Words: </label><br/>
             <ul id='synonym_list'>
             {
                 props.synonyms.map(synonym =>(
